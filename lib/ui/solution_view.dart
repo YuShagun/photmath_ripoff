@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tex/flutter_tex.dart';
-import 'package:photomath_ripoff/models/solution_view_model.dart';
+import '../models/solution/solution_view_model.dart';
 
 
 class SolutionView {

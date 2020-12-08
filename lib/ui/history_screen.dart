@@ -2,9 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tex/flutter_tex.dart';
-import 'package:photomath_ripoff/data/database_provider.dart';
-import 'package:photomath_ripoff/models/solution.dart';
-import 'package:photomath_ripoff/models/solution_view_model.dart';
+import '../data/database_provider.dart';
+import '../models/solution/solution_view_model.dart';
 import 'solution_view.dart';
 import 'display_solution.dart';
 import 'bordered_text.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tex/flutter_tex.dart';
-import 'package:photomath_ripoff/data/database_provider.dart';
-import 'package:photomath_ripoff/models/solution_view_model.dart';
-import 'package:photomath_ripoff/ui/solution_view.dart';
+import '../data/database_provider.dart';
+import '../models/solution/solution_view_model.dart';
+import 'solution_view.dart';
 
 
 class DisplaySolution extends StatefulWidget {
@@ -103,7 +103,9 @@ class _DisplaySolutionState extends State<DisplaySolution> {
               return _display(snapshot.data, _screenSize);
             } else if (snapshot.hasError) {
               print(snapshot.error);
-              return Text("${snapshot.error}");
+              return Center(
+                child: Text("Error: you probably turned your phone sideways.\n${snapshot.error}"),
+              );
             }
             return CircularProgressIndicator();
           },

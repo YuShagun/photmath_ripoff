@@ -1,6 +1,6 @@
-import 'image_text.dart';
-import 'expression_solution.dart';
-import 'package:photomath_ripoff/service/web_service.dart';
+import '../image_text.dart';
+import '../expression_solution.dart';
+import '../../service/web_service.dart';
 import 'solution.dart';
 
 

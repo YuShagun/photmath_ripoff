@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:photomath_ripoff/models/image_text.dart';
-import 'package:photomath_ripoff/models/expression_solution.dart';
+import '../models/image_text.dart';
+import '../models/expression_solution.dart';
 
 
 class WebService {

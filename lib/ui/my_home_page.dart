@@ -3,14 +3,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:photomath_ripoff/ui/about.dart';
-import 'package:photomath_ripoff/ui/display_solution.dart';
+import 'about.dart';
+import 'display_solution.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as imglib;
 
 import 'app_drawer.dart';
-import 'package:photomath_ripoff/models/crop_size.dart';
+import '../models/crop_size.dart';
 import 'crop/crop.dart';
 import 'history_screen.dart';
 

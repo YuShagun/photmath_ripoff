@@ -1,7 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'package:photomath_ripoff/models/solution.dart';
+import '../models/solution/solution.dart';
 
 class DatabaseProvider {
   static DatabaseProvider _instance = DatabaseProvider._internal();

@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'drag_detector.dart';
-import 'package:photomath_ripoff/models/crop_size.dart';
+import '../../models/crop_size.dart';
 
 
 class CropRect extends StatefulWidget {

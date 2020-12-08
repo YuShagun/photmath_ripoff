@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:photomath_ripoff/models/crop_size.dart';
+import '../../models/crop_size.dart';
 
 class DragDetector extends StatefulWidget {
   final CropSize size;

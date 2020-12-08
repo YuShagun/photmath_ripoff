@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final CropSize _size = CropSize(width: 250, height: 110);
 
 
-  Future<List<String>> takePicture(BuildContext context, Size screenSize) async {
+  Future<String> takePicture(BuildContext context, Size screenSize) async {
     await _initializeControllerFuture;
 
     final path = join(
@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     File(croppedPath).writeAsBytesSync(imglib.encodePng(cropped));
 
-    return [path, croppedPath];
+    return croppedPath;
   }
 
   @override
@@ -163,12 +163,11 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Icon(Icons.stop_circle),
           ),
           onPressed: () async {
-            List<String> paths = await takePicture(context, screenSize);
+            String path = await takePicture(context, screenSize);
             Navigator.push(
               context,
               MaterialPageRoute(
-                //builder: (context) => DisplayPictureScreen(imagePath: paths[0], croppedImagePath: paths[1]),
-                builder: (context) => DisplaySolution(imgPath: paths[1]),
+                builder: (context) => DisplaySolution.fromImage(imgPath: path),
               ),
             );
           },

@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 import 'package:photomath_ripoff/data/database_provider.dart';
-import 'package:photomath_ripoff/models/solution.dart';
+import 'package:photomath_ripoff/models/solution_view_model.dart';
+import 'package:photomath_ripoff/ui/solution_view.dart';
 
 
 class DisplaySolution extends StatefulWidget {
   final String imgPath;
-  final Solution solution;
+  final SolutionViewModel solution;
 
-  DisplaySolution({Key key, this.imgPath, this.solution}): super(key: key);
+  DisplaySolution.fromImage({Key key, this.imgPath}): solution = null;
+
+  DisplaySolution.existing({Key key, this.solution}): imgPath = null;
 
   @override
   _DisplaySolutionState createState() => _DisplaySolutionState();
 }
 
 class _DisplaySolutionState extends State<DisplaySolution> {
-  Future<Solution> futureSolution;
+  Future<SolutionViewModel> futureSolution;
 
   @override
   void initState() {
     super.initState();
     if(widget.imgPath != null) {
-      futureSolution = Solution.fetch(widget.imgPath);
+      futureSolution = SolutionViewModel.fetch(widget.imgPath);
     }
   }
 
-  _display(Solution solution, Size size) {
+  _display(SolutionViewModel solution, Size size) {
     TeXViewStyle texStyle = TeXViewStyle.fromCSS(
       'padding: 10px 15px; text-align: left; font-size: 20px; line-height: 2.4; overflow: scroll'
     );
@@ -47,11 +50,11 @@ class _DisplaySolutionState extends State<DisplaySolution> {
               ),
             ),
             TeXViewGroup(
-              children: [solution.view()],
+              children: [SolutionView.view(solution)],
               onTap: null,
               normalItemStyle: TeXViewStyle(
-                padding: Solution.padding,
-                margin: Solution.margin,
+                padding: SolutionView.padding,
+                margin: SolutionView.margin,
               ),
             ),
             TeXViewDocument(
@@ -64,9 +67,7 @@ class _DisplaySolutionState extends State<DisplaySolution> {
               ),
             ),
             TeXViewDocument(
-              solution.type != 'error'
-                  ? '\\(${solution.value}\\)'
-                  : '\\(\\textsf{\\textup{${solution.value}}}\\)',
+              solution.value,
               style: texStyle,
             ),
           ],
@@ -90,14 +91,14 @@ class _DisplaySolutionState extends State<DisplaySolution> {
         title: Text('Solution'),
       ),
       body: Center(
-        child: widget.imgPath != null ? FutureBuilder<Solution>(
+        child: widget.imgPath != null ? FutureBuilder<SolutionViewModel>(
           future: futureSolution,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              print(snapshot.data.text);
+              print(snapshot.data.formattedText);
               print(snapshot.data.value);
               DatabaseProvider().openSolutionDatabase().then((_) {
-                DatabaseProvider().saveSolution(snapshot.data);
+                DatabaseProvider().saveSolution(snapshot.data.solution);
               });
               return _display(snapshot.data, _screenSize);
             } else if (snapshot.hasError) {

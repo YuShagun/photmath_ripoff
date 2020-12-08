@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 import 'package:photomath_ripoff/data/database_provider.dart';
 import 'package:photomath_ripoff/models/solution.dart';
+import 'package:photomath_ripoff/models/solution_view_model.dart';
+import 'solution_view.dart';
 import 'display_solution.dart';
 import 'bordered_text.dart';
 
@@ -15,7 +17,7 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  Map<String, Solution> _solutions;
+  Map<String, SolutionViewModel> _solutions;
   bool _delete;
   Set<int> _itemsToDelete;
   bool _hasItemsToDelete;
@@ -26,17 +28,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
   );
 
   final _itemStyle = TeXViewStyle(
-    padding: Solution.padding,
-    margin: Solution.margin,
-    border: Solution.border,
-    borderRadius: Solution.borderRadius,
+    padding: SolutionView.padding,
+    margin: SolutionView.margin,
+    border: SolutionView.border,
+    borderRadius: SolutionView.borderRadius,
   );
 
   void _route(context, solution) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DisplaySolution(solution: solution,),
+        builder: (context) => DisplaySolution.existing(solution: solution,),
       ),
     );
   }
@@ -49,7 +51,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       await DatabaseProvider().deleteSolution(id);
     }
     DatabaseProvider().getSolutionMap().then((value) => setState(() {
-      _solutions = value;
+      _solutions = value.map((key, value) => MapEntry(key, SolutionViewModel(value)));
       _hasItemsToDelete = false;
       _itemsToDelete.clear();
       _loading = false;
@@ -62,7 +64,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     });
     await DatabaseProvider().clearAllSolutions();
     DatabaseProvider().getSolutionMap().then((value) => setState(() {
-      _solutions = value;
+      _solutions = value.map((key, value) => MapEntry(key, SolutionViewModel(value)));
       _hasItemsToDelete = false;
       _itemsToDelete.clear();
       _loading = false;
@@ -74,10 +76,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
         children: children,
         normalItemStyle: _itemStyle,
         selectedItemStyle: TeXViewStyle(
-          padding: Solution.padding,
-          margin: Solution.margin,
-          border: Solution.border,
-          borderRadius: Solution.borderRadius,
+          padding: SolutionView.padding,
+          margin: SolutionView.margin,
+          border: SolutionView.border,
+          borderRadius: SolutionView.borderRadius,
           backgroundColor: Colors.blueGrey.shade300,
         ),
         onItemsSelection: (List<String> ids) {
@@ -116,7 +118,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
     DatabaseProvider().openSolutionDatabase().then((_) {
       DatabaseProvider().getSolutionMap().then((map) => setState(() {
-        _solutions = map;
+        _solutions = map.map((key, value) => MapEntry(key, SolutionViewModel(value)));
         _loading = false;
       }));
     });
@@ -189,7 +191,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         ),
         child: _displayHistory([
           for(var item in _solutions.values.toList().reversed)
-            item.view(),
+            SolutionView.view(item),
         ]),
         loadingWidgetBuilder: (context) => _loadingWidget,
       ),

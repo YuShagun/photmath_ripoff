@@ -9,20 +9,14 @@ Future<void> main() async {
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  final cameras = await availableCameras();
 
-  final firstCamera = cameras.first;
 
-  runApp(MyApp(camera: firstCamera));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final CameraDescription camera;
 
-  const MyApp({
-    Key key,
-    @required this.camera,
-  }) : super(key: key);
+  const MyApp({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +26,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blueGrey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(camera: camera),
+      home: MyHomePage(),
     );
   }
 }

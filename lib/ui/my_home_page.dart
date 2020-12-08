@@ -28,25 +28,51 @@ class _MyHomePageState extends State<MyHomePage> {
   Point<double> _cropRectCenter;
   final CropSize _size = CropSize(width: 250, height: 110);
 
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeControllerFuture = CameraProvider().initializeCamera();
+  Future<void> takePictureAndRedirect(Size screenSize) async {
+    String path = await CameraProvider().takePicture(
+      context: context,
+      screenSize: screenSize,
+      cropSize: _size,
+      center: _cropRectCenter,
+    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DisplaySolution.fromImage(imgPath: path),
+      ),
+    );
   }
 
-  @override
-  void dispose() {
-    // Dispose of the controller when the widget is disposed.
-    super.dispose();
+  void showInfo() {
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text('About'),
+        children: [
+          AboutDialogContent(),
+        ],
+      ),
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
+    @override
+    void initState() {
+      super.initState();
+      _initializeControllerFuture = CameraProvider().initializeCamera();
+    }
+
+    @override
+    void dispose() {
+      // Dispose of the controller when the widget is disposed.
+      super.dispose();
+    }
+
+    @override
+    Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     _cropRectCenter = Point<double>(
-        screenSize.width / 2,
-        ((screenSize.width + 40) / 2) / 16 * 9 + 80,
+      screenSize.width / 2,
+      ((screenSize.width + 40) / 2) / 16 * 9 + 80,
     );
 
     return Scaffold(
@@ -66,15 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           IconButton(
             icon: Icon(Icons.info_outline),
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => SimpleDialog(
-                title: Text('About'),
-                children: [
-                  AboutDialogContent(),
-                ],
-              )
-            ),
+            onPressed: showInfo,
           ),
         ],
       ),
@@ -105,20 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Container(
             child: Icon(Icons.stop_circle),
           ),
-          onPressed: () async {
-            String path = await CameraProvider().takePicture(
-              context: context,
-              screenSize: screenSize,
-              cropSize: _size,
-              center: _cropRectCenter,
-            );
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DisplaySolution.fromImage(imgPath: path),
-              ),
-            );
-          },
+          onPressed: () => takePictureAndRedirect(screenSize),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

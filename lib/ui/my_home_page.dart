@@ -64,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
     @override
     void dispose() {
       // Dispose of the controller when the widget is disposed.
+      CameraProvider().dispose();
       super.dispose();
     }
 
